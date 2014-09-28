@@ -7,5 +7,5 @@ server:server.c
 	cc -o server server.c -Wall -lnsl -lresolv
 
 clean: 
-	rm client server
+	rm client server *.out
 	

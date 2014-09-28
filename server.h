@@ -37,7 +37,8 @@ pid_t PPId,PId[MAXSERVERCONN]; /* Child socket Process Handling */
 /* Struct - To handle the command-line arguments */
 struct arguments{
 	char filename[MAXLEN];		/* Config Filename */
-	boolean has_filename;			/* True or False - Check if argument has any filename */
+	boolean has_filename;			/* True or False - Check if argument 
+																has any filename */
 };
 
 /* Struct - To handle client request*/
@@ -60,5 +61,6 @@ void StoreData(char *username,char *password,char **commands,int lcounter);
 /* Function 	- readFile - Reads the Input File */
 void ReadFile(char *inputFile);
 
-/* Function		-	ServerSetup - Creates a TCP Server and waits for clients request */
+/* Function		-	ServerSetup - Creates a TCP Server and waits for clients request
+*/
 int ServerSetup();

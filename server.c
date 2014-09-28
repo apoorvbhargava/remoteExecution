@@ -230,7 +230,8 @@ int ServerSetup(){
 	
 	int icounter=0,jcounter=0,kcounter=0;	
 	int bytesReceived, bytesSent;
-	boolean ucheck=FALSE,pcheck=FALSE,ccheck=FALSE,validUser=FALSE,validCommand=FALSE;
+	boolean ucheck=FALSE,pcheck=FALSE,ccheck=FALSE,validUser=FALSE
+					,validCommand=FALSE;
 	char ch;
 	socklen_t clientSocketAddressLength;
 	
@@ -257,7 +258,8 @@ int ServerSetup(){
 	serverSocketAddress.sin_port = htons(SERVER_PORT);
 	
 	/* Binding Server socket to listen at desired port -- Start */
-	if (bind(sockfd, (struct sockaddr *) &serverSocketAddress, sizeof(serverSocketAddress)) < 0){
+	if (bind(sockfd, (struct sockaddr *) &serverSocketAddress, 
+			sizeof(serverSocketAddress)) < 0){
 		printf("ERROR: Unable to bind server socket.\n");
 		return 0;
 	}
@@ -282,7 +284,8 @@ int ServerSetup(){
 		/* Re-initializing all the values -- End */
 		
 		/* Accepting connection from Client -- Start */
-		newsockfd = accept(sockfd,(struct sockaddr *)&clientSocketAddress, &clientSocketAddressLength);
+		newsockfd = accept(sockfd,(struct sockaddr *)&clientSocketAddress,
+			&clientSocketAddressLength);
 		
 		/* Check if accepted client connection */
 		if (newsockfd < 0){
@@ -345,11 +348,13 @@ int ServerSetup(){
 
 			temp=users;
 			while(temp->link != NULL){
-				if(strcmp(temp->username,username) == 0 && strcmp(temp->password,password) == 0){
+				if(strcmp(temp->username,username) == 0 && 
+						strcmp(temp->password,password) == 0){
 					validUser=TRUE;
 					icounter=0;
 					while(temp->commands[icounter] != NULL){
-						if(strncmp(command,temp->commands[icounter],strlen(temp->commands[icounter])) == 0){	
+						if(strncmp(command,temp->commands[icounter],
+								strlen(temp->commands[icounter])) == 0){	
 							validCommand=TRUE;
 							break;
 						}
@@ -372,7 +377,7 @@ int ServerSetup(){
 			/* Execute Command And Send data -- Start */
 			if(validCommand){
 				sprintf(outFile, "file%d.out", pid);
-				sprintf(command, "%s > %s", command,outFile);
+				sprintf(command, "%s > %s 2>&1", command,outFile);
 				fp = popen(command, "r");
 				if (fp == NULL) {
 					strcpy(sendBuff,"Failed to run command\n");
@@ -409,7 +414,10 @@ int ServerSetup(){
 			/* Sending Remaining Data or Control message to Client -- End */
 			
 			/* Notify Client that its over -- Start */
-			/* This message should be sent only after previous packets are received by the client, so either we should know RTT or set a sleep timer, but there is a workaround as well if at client we can check the message and strip this message from been displayed -- Extra work for client */
+			/* This message should be sent only after previous packets are received 
+				 by the client, so either we should know RTT or set a sleep timer, but 
+				 there is a workaround as well if at client we can check the message and
+				 strip this message from been displayed -- Extra work for client */
 			memset(sendBuff, '\0' ,sizeof(sendBuff));
 			strcpy(sendBuff,"***The End***");
 			bytesSent= write(newsockfd,sendBuff,strlen(sendBuff));
@@ -432,7 +440,8 @@ int ServerSetup(){
 	return 0; /* Unreachable code - just for sanity */
 }
 /* 
-*	Function	:	main - Initiates server, reads the argument, establishes TCP server and on receiving command replies back to client.
+*	Function	:	main - Initiates server, reads the argument, establishes TCP 
+											server and on receiving command replies back to client.
 *	Parameter	:	arguments
 *	Return		:	0
 */
@@ -488,9 +497,9 @@ int main(int argc, char** argv){
 	ServerSetup();
 	/* Creat & Start server -- End */
 
-	/* Wait for the end. After killing all the Child Processes main process will end - Start */
+	/* Wait for the end. Once all child dead kill main process - Start */
 	while (1);
-	/* Wait for the end. After killing all the Child Processes main process will end - End */
+	/* Wait for the end. Once all child dead kill main process - End */
 
 	return 0;
 }

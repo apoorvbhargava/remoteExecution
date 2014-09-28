@@ -1,5 +1,5 @@
-user1,pass1,ls,telenet,ps
-user2,pass2,ls,ps
+user1,pass1,ls,ifconfig,ps
+user2,pass2,ls,ps,netstat
 user3,pass3
 
 

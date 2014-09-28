@@ -24,27 +24,29 @@
 #include <sys/wait.h> 
 #include <signal.h>
 
-#define MAXLEN 1024					/* Max size allowed */
-#define SERVER_PORT 45454		/* Server TCP Port */
+#define MAXLEN 1024		/* Max size allowed */
+#define SERVER_PORT 45454	/* Server TCP Port */
 
-#define TRUE  1				/* Defining Boolean Values True-1 */
-#define FALSE 0				/* Defining Boolean Values False-0 */
+#define TRUE  1		/* Defining Boolean Values True-1 */
+#define FALSE 0		/* Defining Boolean Values False-0 */
 typedef int boolean;	/* Defining Boolean */
 
 /* Struct - To handle the command-line arguments */
 struct arguments{
-	char server[MAXLEN];		/* Server address */
+	char server[MAXLEN];	/* Server address */
 	char username[MAXLEN];	/* Username */
 	char password[MAXLEN];	/* Password */
-	char command[MAXLEN];		/* Command */
-	boolean has_server;			/* True or False - Check if has any server address*/
-	boolean has_username;		/* True or False - Check if has any Username */
-	boolean has_password;		/* True or False - Check if has any password */
-	boolean has_command;		/* True or False - Check if has any execution command */
+	char command[MAXLEN];	/* Command */
+	boolean has_server;	/* True or False - Check if has any server address*/
+	boolean has_username;	/* True or False - Check if has any Username */
+	boolean has_password;	/* True or False - Check if has any password */
+	boolean has_command;	/* True or False - Check if has any execution command */
 };
 
 /* Function usage - Prints the Error Description and command details */
 void usage();
 
-/*	Function 	- ClientConnection - Creates a TCP connection with SERVER and sends the command to be executed. */
-int ClientConnection(char server_ip[MAXLEN],char username[MAXLEN],char password[MAXLEN],char command[MAXLEN]);
+/* Function ClientConnection - Creates a TCP connection with SERVER and 
+   sends the command to be executed. */
+int ClientConnection(char server_ip[MAXLEN],char username[MAXLEN],char password[MAXLEN],
+    char command[MAXLEN]);
