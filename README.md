@@ -70,3 +70,7 @@ File Description:
 	4. README.md:
 	-----------
 		=> Contains the project details and steps to execute it.
+	
+	5. sampleFile:
+	-----------
+		=> Sample Config file.
