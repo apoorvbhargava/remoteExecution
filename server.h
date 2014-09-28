@@ -26,6 +26,7 @@
 
 #define MAXLEN 1024			/* Max size allowed */
 #define MAXSERVERCONN 3			/* Max connection allowed at the server */
+#define SERVER_PORT 45454		/* Server TCP Port */
 
 #define TRUE  1		/* Defining Boolean Values True-1 */
 #define FALSE 0		/* Defining Boolean Values False-0 */
@@ -47,8 +48,8 @@ struct userRecords{
 	struct userRecords *link;
 };
 
-/* Function intHandler - Handler to kill all the processes on Ctrl+C */
-void intHandler(int i, siginfo_t *info, void *dummy);
+/* Function interruptHandler - Handler to kill all the processes on Ctrl+C */
+void interruptHandler(int i, siginfo_t *info, void *dummy);
 
 /*	Function usage - Prints the usage instructions */
 void usage();
@@ -58,3 +59,6 @@ void StoreData(char *username,char *password,char **commands,int lcounter);
 
 /* Function 	- readFile - Reads the Input File */
 void ReadFile(char *inputFile);
+
+/* Function		-	ServerSetup - Creates a TCP Server and waits for clients request */
+int ServerSetup();
