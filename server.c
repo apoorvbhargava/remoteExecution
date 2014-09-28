@@ -1,6 +1,6 @@
 /*
 *		Author		-		Apoorv Bhargava
-*		File Name	-		server.d
+*		File Name	-		server.c
 */
 
 #include "server.h"
@@ -130,7 +130,7 @@ void ReadFile(char *inputFile){
 
 	/* Read File Data -- Start */
 	if(filep == NULL){
-		printf("The File %s does not exist.\n",inputFile);
+		printf("ERROR: The File %s does not exist.\n",inputFile);
 		exit(0);
 	}else{
 		while((ch = fgetc(filep)) != EOF ){
@@ -246,7 +246,7 @@ int ServerSetup(){
 	
 	/* Check if server socket created */
 	if (sockfd < 0){
-		printf("ERROR: Unable to open socket.");
+		printf("ERROR: Unable to open socket.\n");
 		return 0;
 	}
 	
@@ -258,7 +258,7 @@ int ServerSetup(){
 	
 	/* Binding Server socket to listen at desired port -- Start */
 	if (bind(sockfd, (struct sockaddr *) &serverSocketAddress, sizeof(serverSocketAddress)) < 0){
-		printf("ERROR: Unable to bind server socket.");
+		printf("ERROR: Unable to bind server socket.\n");
 		return 0;
 	}
 	/* Binding Server socket to listen at desired port -- End */
@@ -286,7 +286,7 @@ int ServerSetup(){
 		
 		/* Check if accepted client connection */
 		if (newsockfd < 0){
-			printf("ERROR: Unable to accept client connection.");
+			printf("ERROR: Unable to accept client connection.\n");
 			continue;
 		}
 		
@@ -302,7 +302,7 @@ int ServerSetup(){
 			bytesReceived = recv(newsockfd, &recvBuff, sizeof(recvBuff), 0);
 			
 			if(bytesReceived < 0){
-				perror("Error: Socket unable to read data");
+				printf("ERROR: Socket unable to read data");
 				return 0;
 			}
 			/* Receiving Data from the Client -- End */
@@ -386,7 +386,7 @@ int ServerSetup(){
 							/* Sending Data to Client -- Start */
 							bytesSent = write(newsockfd,tempString,strlen(tempString));
 							if (bytesSent < 0){
-								printf("Error: Server unable to send data.");
+								printf("ERROR: Server unable to send data.\n");
 								return  0;
 							}
 							/* Sending Data to Client -- End */
@@ -403,10 +403,21 @@ int ServerSetup(){
 			/* Sending Remaining Data or Control message to Client -- Start */
 			bytesSent= write(newsockfd,sendBuff,strlen(sendBuff));
 			if (bytesSent < 0){
-				printf("Error: Server unable to send data.");
+				printf("ERROR: Server unable to send data.\n");
 				return  0;
 			}
 			/* Sending Remaining Data or Control message to Client -- End */
+			
+			/* Notify Client that its over -- Start */
+			/* This message should be sent only after previous packets are received by the client, so either we should know RTT or set a sleep timer, but there is a workaround as well if at client we can check the message and strip this message from been displayed -- Extra work for client */
+			memset(sendBuff, '\0' ,sizeof(sendBuff));
+			strcpy(sendBuff,"***The End***");
+			bytesSent= write(newsockfd,sendBuff,strlen(sendBuff));
+			if (bytesSent < 0){
+				printf("ERROR: Server unable to send data.\n");
+				return  0;
+			}
+			/* Notify Client that its over -- Start */
 			
 			/* Finished working - Close the connection */
 			close(newsockfd);
